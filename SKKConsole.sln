@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp2", "Windows
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SKKConsole", "SKKConsole\SKKConsole.csproj", "{B7D3EB24-7831-4BF2-94EF-7301F887B5C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleHelper", "ConsoleHelper\ConsoleHelper.csproj", "{7CB6EFF7-C137-4FFA-AAAB-828320A1E14C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B7D3EB24-7831-4BF2-94EF-7301F887B5C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7D3EB24-7831-4BF2-94EF-7301F887B5C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7D3EB24-7831-4BF2-94EF-7301F887B5C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CB6EFF7-C137-4FFA-AAAB-828320A1E14C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CB6EFF7-C137-4FFA-AAAB-828320A1E14C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CB6EFF7-C137-4FFA-AAAB-828320A1E14C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CB6EFF7-C137-4FFA-AAAB-828320A1E14C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

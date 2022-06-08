@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.butShowHide = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -39,7 +40,7 @@
             this.tbMsg = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
-            this.skkConsoleData1 = new SKKConsoleNS.SKKConsoleData();
+            this.skkConsoleData1 = new SKKConsoleNS.SKKConsoleData(this.components);
             ((System.ComponentModel.ISupportInitialize)(this._panelFUCK)).BeginInit();
             this.SuspendLayout();
             // 
@@ -139,7 +140,13 @@
             // skkConsoleData1
             // 
             this.skkConsoleData1.DefaultColors = ((System.Collections.Generic.List<System.Drawing.Color>)(resources.GetObject("skkConsoleData1.DefaultColors")));
+            this.skkConsoleData1.DefaultConfig = ((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultConfig")));
             this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages"))));
+            this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages1"))));
+            this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages2"))));
+            this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages3"))));
+            this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages4"))));
+            this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages5"))));
             // 
             // Form1
             // 

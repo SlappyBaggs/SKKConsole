@@ -123,14 +123,23 @@ namespace SKKConsoleNS
 
         [Browsable(true)]
         [Category("Page Options")]
+        [DisplayName("DefaultPage")]
+        [Description("Def Page")]
+        [TypeConverter(typeof(ConsolePageConfigTypeConverter))]
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [DefaultValue(typeof(ConsolePageConfig), "Page;Red;Comic Sans MS, 12pt")]
+        public ConsolePageConfig DefaultConfig { get; set; } = new ConsolePageConfig();
+
+
+        [Browsable(true)]
+        [Category("Page Options")]
         [DisplayName("DefaultPages")]
         [Description("Pages to auto-create on start")]
-        [TypeConverter(typeof(ExpandableObjectConverter))]
+        [TypeConverter(typeof(ConsolePageConfigCollectionTypeConverter))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        //[DefaultValue(typeof(ConsolePageConfigCollection), "")]
         [Editor(typeof(CollectionEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        //[TypeConverter(typeof(ConsolePageConfigCollectionTypeConverter))]
-        //public List<ConsolePageConfig> DefaultPages { get; private set; } = new List<ConsolePageConfig>();
-        public ConsolePageConfigCollection DefaultPages { get; private set; } = new ConsolePageConfigCollection();
+        public ConsolePageConfigCollection DefaultPages { get; set; } = new ConsolePageConfigCollection();
     }
 }
 
