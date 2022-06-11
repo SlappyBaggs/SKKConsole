@@ -12,7 +12,7 @@ namespace SKKConsoleNS.SKKConsolePageConfig
 {
     public class ConsolePageConfigTypeConverter : ExpandableObjectConverter
     {
-        private static string delim_ = ";";
+        internal static string delim_ = ";";
 
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) => destinationType == typeof(string) || base.CanConvertTo(context, destinationType);
 

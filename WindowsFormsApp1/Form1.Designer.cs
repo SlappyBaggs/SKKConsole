@@ -146,7 +146,6 @@
             this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages2"))));
             this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages3"))));
             this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages4"))));
-            this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages5"))));
             // 
             // Form1
             // 

@@ -86,6 +86,7 @@
     <Compile Include="SKKConsolePageConfig\SKKConsolePageConfigCollection.cs" />
     <Compile Include="SKKConsolePageConfig\SKKConsolePageConfigCollectionTypeConverter.cs" />
     <Compile Include="SKKConsolePageConfig\SKKConsolePageConfigEnumerator.cs" />
+    <Compile Include="SKKConsolePageConfig\SKKConsolePageConfigStorage.cs" />
     <Compile Include="SKKConsolePageConfig\SKKConsolePageConfigTypeConverter.cs" />
   </ItemGroup>
   <ItemGroup>

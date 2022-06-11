@@ -32,9 +32,14 @@ namespace SKKConsoleNS.SKKConsolePageConfig
             PageFont = (f == null) ? DefaultFont : f;
         }
 
+        private string pageName_;
         [Category("Required")]
         [DefaultValue("Page")]
-        public string PageName { get; set; }// = "Page";
+        public string PageName
+        {
+            get => pageName_;
+            set => pageName_ = SKKConsolePageConfigStorage.ValidateName(value);// SKKConsoleNS. value;// SKK
+        }// = "Page";
         [Category("Required")]
         [DefaultValue(typeof(Color), "Red")]
         public Color PageColor { get; set; }// = Color.Red;
@@ -42,7 +47,7 @@ namespace SKKConsoleNS.SKKConsolePageConfig
         [DefaultValue(typeof(Font), "Comic Sans MS, 12pt")]
         public Font PageFont { get; set; }
 
-        public override string ToString() => $"Page: {PageName}";
+        public override string ToString() => $"{PageName}{ConsolePageConfigTypeConverter.delim_}{PageColor.Name}{ConsolePageConfigTypeConverter.delim_}{PageFont.ToString()}";
         //public override string ToString() => PageName;
 #if WTF
         public override bool Equals(object obj)
