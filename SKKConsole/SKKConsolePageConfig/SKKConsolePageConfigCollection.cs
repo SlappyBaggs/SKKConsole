@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace SKKConsoleNS.SKKConsolePageConfig
 {
-    //[Serializable]
+    [Serializable]
     [TypeConverter(typeof(ConsolePageConfigCollectionTypeConverter))]
     public class ConsolePageConfigCollection : CollectionBase, ICustomTypeDescriptor
     {
@@ -19,7 +19,7 @@ namespace SKKConsoleNS.SKKConsolePageConfig
 
         public ConsolePageConfig this[int i] { get => (ConsolePageConfig)List[i]; }
 
-        public void Add(ConsolePageConfig item) { if(item != null) List.Add(item); }
+        public void Add(ConsolePageConfig item) { if (item != null) List.Add(item); } //{ if(item != null) List.Add(item); }
 
         public void Remove(ConsolePageConfig item) => List.Remove(item);
         #endregion

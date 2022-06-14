@@ -130,32 +130,13 @@
         cmljLkxpc3RgMVtbU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAABl9pdGVtcwVfc2l6ZQhfdmVyc2lvbgQA
         ABZTeXN0ZW0uRHJhd2luZy5Db2xvcltdAwAAAAgIAgAAAAkEAAAADQAAAA0AAAAHBAAAAAABAAAAEAAA
         AAQUU3lzdGVtLkRyYXdpbmcuQ29sb3IDAAAABfv///8UU3lzdGVtLkRyYXdpbmcuQ29sb3IEAAAABG5h
-        bWUFdmFsdWUKa25vd25Db2xvcgVzdGF0ZQEAAAAJBwcDAAAACgAAAAAAAAAAjQABAAH6////+////woA
-        AAAAAAAAAIkAAQAB+f////v///8KAAAAAAAAAABoAAEAAfj////7////CgAAAAAAAAAATwABAAH3////
-        +////woAAAAAAAAAADAAAQAB9v////v///8KAAAAAAAAAAAlAAEAAfX////7////CgAAAAAAAAAApAAB
-        AAH0////+////woAAAAAAAAAAGcAAQAB8/////v///8KAAAAAAAAAACmAAEAAfL////7////CgAAAAAA
-        AAAAawABAAHx////+////woAAAAAAAAAAF8AAQAB8P////v///8KAAAAAAAAAABOAAEAAe/////7////
-        CgAAAAAAAAAAjAABAAHu////+////woAAAAAAAAAAAAAAAAB7f////v///8KAAAAAAAAAAAAAAAAAez/
+        bWUFdmFsdWUKa25vd25Db2xvcgVzdGF0ZQEAAAAJBwcDAAAACgAAAAAAAAAAiQABAAH6////+////woA
+        AAAAAAAAAGgAAQAB+f////v///8KAAAAAAAAAABPAAEAAfj////7////CgAAAAAAAAAAMAABAAH3////
+        +////woAAAAAAAAAACUAAQAB9v////v///8KAAAAAAAAAACkAAEAAfX////7////CgAAAAAAAAAAZwAB
+        AAH0////+////woAAAAAAAAAAKYAAQAB8/////v///8KAAAAAAAAAABrAAEAAfL////7////CgAAAAAA
+        AAAAXwABAAHx////+////woAAAAAAAAAAE4AAQAB8P////v///8KAAAAAAAAAACMAAEAAe/////7////
+        CgAAAAAAAAAAjQABAAHu////+////woAAAAAAAAAAAAAAAAB7f////v///8KAAAAAAAAAAAAAAAAAez/
         ///7////CgAAAAAAAAAAAAAAAAs=
 </value>
-  </data>
-  <assembly alias="SKKConsole" name="SKKConsole, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-  <data name="skkConsoleData1.DefaultConfig" type="SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig, SKKConsole">
-    <value>Page21;Red;[Font: Name=Comic Sans MS, Size=12, Units=3, GdiCharSet=1, GdiVerticalFont=False]</value>
-  </data>
-  <data name="skkConsoleData1.DefaultPages" type="SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig, SKKConsole">
-    <value>Page94;Red;[Font: Name=Comic Sans MS, Size=12, Units=3, GdiCharSet=1, GdiVerticalFont=False]</value>
-  </data>
-  <data name="skkConsoleData1.DefaultPages1" type="SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig, SKKConsole">
-    <value>Page2;Red;[Font: Name=Comic Sans MS, Size=12, Units=3, GdiCharSet=1, GdiVerticalFont=False]</value>
-  </data>
-  <data name="skkConsoleData1.DefaultPages2" type="SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig, SKKConsole">
-    <value>Page43;Red;[Font: Name=Comic Sans MS, Size=12, Units=3, GdiCharSet=1, GdiVerticalFont=False]</value>
-  </data>
-  <data name="skkConsoleData1.DefaultPages3" type="SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig, SKKConsole">
-    <value>Page84;Red;[Font: Name=Comic Sans MS, Size=12, Units=3, GdiCharSet=1, GdiVerticalFont=False]</value>
-  </data>
-  <data name="skkConsoleData1.DefaultPages4" type="SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig, SKKConsole">
-    <value>Page6;Red;[Font: Name=Comic Sans MS, Size=12, Units=3, GdiCharSet=1, GdiVerticalFont=False]</value>
   </data>
 </root>

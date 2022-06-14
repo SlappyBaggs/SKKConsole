@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
-using System.Drawing;
 using System.Globalization;
 
 namespace SKKConsoleNS.SKKConsolePageConfig
 {
     public class ConsolePageConfigCollectionTypeConverter :  TypeConverter //ExpandableObjectConverter
     {
-        private static string delim_ = "|";
+        //private static string delim_ = "|";
 
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) => destinationType == typeof(string) || base.CanConvertTo(context, destinationType);
 
@@ -22,12 +17,12 @@ namespace SKKConsoleNS.SKKConsolePageConfig
             if (destinationType != typeof(string) || coll is null) return base.ConvertTo(context, culture, value, destinationType);
 
             return "(Collection)";
-            if (coll.Count == 0) return "";
-
-            StringBuilder sb = new StringBuilder();
-            if(coll.Count > 0) foreach (ConsolePageConfig c in coll) sb.Append($"{TypeDescriptor.GetConverter(typeof(ConsolePageConfig)).ConvertToInvariantString(c)}{delim_}");
-            sb.Remove(sb.Length - delim_.Length, delim_.Length);
-            return sb.ToString();
+            
+            //if (coll.Count == 0) return "";
+            //StringBuilder sb = new StringBuilder();
+            //if(coll.Count > 0) foreach (ConsolePageConfig c in coll) sb.Append($"{TypeDescriptor.GetConverter(typeof(ConsolePageConfig)).ConvertToInvariantString(c)}{delim_}");
+            //sb.Remove(sb.Length - delim_.Length, delim_.Length);
+            //return sb.ToString();
         }
 
         //public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) => sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);

@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SKKConsole</RootNamespace>
     <AssemblyName>SKKConsole</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ComponentFactory.Krypton.Design, Version=4.5.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
@@ -64,30 +67,29 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
-    <Compile Include="SKKConsole.cs">
+    <Compile Include="Console\SKKConsole.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SKKConsole.Designer.cs">
+    <Compile Include="Console\SKKConsole.Designer.cs">
       <DependentUpon>SKKConsole.cs</DependentUpon>
     </Compile>
-    <Compile Include="SKKConsoleData.cs">
+    <Compile Include="Data\SKKConsoleData.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SKKConsoleData.Designer.cs">
+    <Compile Include="Data\SKKConsoleData.Designer.cs">
       <DependentUpon>SKKConsoleData.cs</DependentUpon>
     </Compile>
-    <Compile Include="SKKConsolePage.cs">
+    <Compile Include="Console\SKKConsolePage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SKKConsolePage.Designer.cs">
+    <Compile Include="Console\SKKConsolePage.Designer.cs">
       <DependentUpon>SKKConsolePage.cs</DependentUpon>
     </Compile>
     <Compile Include="SKKConsolePageConfig\SKKConsolePageConfig.cs" />
     <Compile Include="SKKConsolePageConfig\SKKConsolePageConfigCollection.cs" />
-    <Compile Include="SKKConsolePageConfig\SKKConsolePageConfigCollectionTypeConverter.cs" />
-    <Compile Include="SKKConsolePageConfig\SKKConsolePageConfigEnumerator.cs" />
-    <Compile Include="SKKConsolePageConfig\SKKConsolePageConfigStorage.cs" />
-    <Compile Include="SKKConsolePageConfig\SKKConsolePageConfigTypeConverter.cs" />
+    <Compile Include="SKKConsolePageConfig\TypeConverters\SKKConsolePageConfigCollectionTypeConverter.cs" />
+    <Compile Include="Data\SKKConsolePageConfigDefaults.cs" />
+    <Compile Include="SKKConsolePageConfig\TypeConverters\SKKConsolePageConfigTypeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -97,11 +99,11 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SKKConsole.resx">
+    <EmbeddedResource Include="Console\SKKConsole.resx">
       <DependentUpon>SKKConsole.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SKKConsolePage.resx">
+    <EmbeddedResource Include="Console\SKKConsolePage.resx">
       <DependentUpon>SKKConsolePage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

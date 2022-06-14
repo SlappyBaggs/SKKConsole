@@ -30,6 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig consolePageConfig1 = new SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig();
+            SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig consolePageConfig2 = new SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig();
+            SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig consolePageConfig3 = new SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig();
+            SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfigALL consolePageConfigALL1 = new SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfigALL();
             this.butShowHide = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
@@ -40,7 +44,7 @@
             this.tbMsg = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
-            this.skkConsoleData1 = new SKKConsoleNS.SKKConsoleData(this.components);
+            this.skkConsoleData1 = new SKKConsoleNS.Data.SKKConsoleData(this.components);
             ((System.ComponentModel.ISupportInitialize)(this._panelFUCK)).BeginInit();
             this.SuspendLayout();
             // 
@@ -140,12 +144,20 @@
             // skkConsoleData1
             // 
             this.skkConsoleData1.DefaultColors = ((System.Collections.Generic.List<System.Drawing.Color>)(resources.GetObject("skkConsoleData1.DefaultColors")));
-            this.skkConsoleData1.DefaultConfig = ((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultConfig")));
-            this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages"))));
-            this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages1"))));
-            this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages2"))));
-            this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages3"))));
-            this.skkConsoleData1.DefaultPages.Add(((SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig)(resources.GetObject("skkConsoleData1.DefaultPages4"))));
+            consolePageConfig1.PageColor = System.Drawing.Color.Lime;
+            consolePageConfig1.PageName = "Page";
+            consolePageConfig2.PageColor = System.Drawing.Color.Lime;
+            consolePageConfig2.PageName = "Page";
+            consolePageConfig3.PageColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            consolePageConfig3.PageFont = new System.Drawing.Font("Cookies", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            consolePageConfig3.PageName = "ListOrder";
+            this.skkConsoleData1.DefaultPages.Add(consolePageConfig1);
+            this.skkConsoleData1.DefaultPages.Add(consolePageConfig2);
+            this.skkConsoleData1.DefaultPages.Add(consolePageConfig3);
+            consolePageConfigALL1.PageColor = System.Drawing.Color.Red;
+            consolePageConfigALL1.PageFont = new System.Drawing.Font("Comic Sans MS", 12F);
+            consolePageConfigALL1.PageName = "ALL";
+            this.skkConsoleData1.PageALLConfig = consolePageConfigALL1;
             // 
             // Form1
             // 
@@ -182,7 +194,7 @@
         private ComponentFactory.Krypton.Toolkit.KryptonTextBox tbMsg;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.PropertyGrid propertyGrid1;
-        private SKKConsoleNS.SKKConsoleData skkConsoleData1;
+        private SKKConsoleNS.Data.SKKConsoleData skkConsoleData1;
     }
 }
 

@@ -2,16 +2,12 @@
 using ComponentFactory.Krypton.Navigator;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Reflection;
 using SKKConsoleNS.SKKConsolePageConfig;
+using SKKConsoleNS.Data;
 
 namespace SKKConsoleNS
 {
@@ -19,59 +15,10 @@ namespace SKKConsoleNS
 
     public partial class SKKConsole : KryptonForm
     {
-        /// <summary>
-        /// Make the SKKConsoleWindow a singleton class
-        /// </summary>
-        private static SKKConsole _instance = null;
-
-        private static IntPtr _handleMagic;
-
-        public static SKKConsoleData _consoleData { get; set; }
-
-        internal static SKKConsole CWindow
-        {
-            get
-            {
-                if (_instance == null) _instance = new SKKConsole();
-                _handleMagic = _instance.Handle;
-                return _instance;
-            }
-        }
-        internal static bool Showing { get { return CWindow.Visible; } }
-        internal static void ShowConsole()
-        {
-            //if(CWindow.InvokeRequired)
-            if (Hidden) CWindow.Show();
-        }
-        internal static bool Hidden { get { return !Showing; } }
-        internal static void HideConsole() { if (Showing) CWindow.Hide(); }
-
-        // Does this have to be exposed??
-        private static Color defColor = Color.Red;
-        internal static Color SKKConsoleDefaultColor { get => (_consoleData != null) ? _consoleData.PageAllColor : defColor; }
-
-
-
-        private static Font defFont = new Font("Comic Sans MS", 12f);
-        public static Font SKKConsoleDefaultFont { get => (_consoleData != null) ? _consoleData.PageAllFont : defFont; }
-
-        internal static event ConsoleHidden OnConsoleHidden;
-
+#if EMBED_FONTS
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
         private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
         private PrivateFontCollection fonts = new PrivateFontCollection();
-        //Font? myFont;
-
-        private SKKConsole()
-        {
-            InitializeComponent();
-            _handleMagic = CWindow.Handle;
-            _navigator.Pages.Clear();
-            AddCategory("ALL", SKKConsoleDefaultColor, SKKConsoleDefaultFont);
-
-            //InitFont();
-            InitDefaultPages();
-        }
 
         private void InitFont()
         {
@@ -86,17 +33,39 @@ namespace SKKConsoleNS
             //myFont = new Font(fonts.Families[0], 16.0F);
             //myFont = new Font("Playball", 16.0F);
         }
+#endif
+
+        private IntPtr _handleMagic;
+
+        private Font defFont = new Font("Comic Sans MS", 12f);
+
+        internal event ConsoleHidden OnConsoleHidden = delegate { };
+
+        private SKKConsoleData myData_ = null;
+        public SKKConsole(SKKConsoleData data)
+        {
+            InitializeComponent();
+            myData_ = data;
+            _handleMagic = Handle;
+
+#if EMBED_FONTS
+            InitFont();
+#endif
+
+            OnConsoleHidden += myData_.OnConsoleHidden;
+
+            InitDefaultPages();
+        }
 
         public void InitDefaultPages()
         {
             _navigator.Pages.Clear();
             dictRTB.Clear();
-            AddCategory("ALL", SKKConsoleDefaultColor, SKKConsoleDefaultFont);
+            AddCategory("ALL", myData_.PageALLConfig.PageColor, myData_.PageALLConfig.PageFont);
 
-            if(_consoleData != null) foreach (ConsolePageConfig page in _consoleData.DefaultPages) AddCategory(page.PageName, page.PageColor, page.PageFont ?? SKKConsoleDefaultFont);
+            foreach (ConsolePageConfig page in myData_.DefaultPages)
+                AddCategory(page.PageName, page.PageColor, page.PageFont /*?? SKKConsoleDefaultFont*/);
         }
-
-
 
         /******************************************************
             A few ways to add a category page.  All functions
@@ -111,23 +80,11 @@ namespace SKKConsoleNS
             a page we can guarantee we only do so when it won't
             be empty.  
         ******************************************************/
-        private void AddPage(string name) { AddCategory(name); }
-        //private void AddCat(string name) { AddCategory(name); }
+        private void AddPage(string name) => AddCategory(name);
 
-        private void AddCategory(string name)
-        {
-            if(_consoleData != null) AddCategory(name, _consoleData.GetNC(), (name == "ALL") ? _consoleData.PageAllFont : _consoleData.DefaultFont);
-        }
+        private void AddCategory(string name) => AddCategory(name, SKKConsoleData.NextColor);
 
-        //private void AddCategory(string name, Color col_)
-        //{
-        //AddCategory(name, col_, SKKConsoleDefaultFont);
-        //}
-
-        //private void AddCategory(string name, Font font_)
-        //{
-        //AddCategory(name, skkConsoleData1.GetNC(), font_);
-        //}
+        private void AddCategory(string name, Color col_) => AddCategory(name, col_, SKKConsoleData.DefaultFont);
 
         private void AddCategory(string name, Color col_, Font font_)
         {
@@ -153,7 +110,6 @@ namespace SKKConsoleNS
         }
 
         private Dictionary<string, KryptonRichTextBox> dictRTB = new Dictionary<string, KryptonRichTextBox>();
-
 
         /**********************************************************
             A property that returns whether a category/page exists
@@ -187,52 +143,65 @@ namespace SKKConsoleNS
 
             Writes the comment to the 'ALL' page in category's font & color
          *************************************************************/
-        internal static void Write(string msg, string cat)
+        internal void Write(string cat, string msg)
         {
-            SKKConsole con = CWindow;
-            CWindow.Invoke((Action)delegate { Write2(msg, cat); });
+            if (InvokeRequired) { Invoke((Action)delegate { Write(msg, cat); }); }
+            else
+            {
+                if (cat == "ALL") return;
+
+                Dictionary<string, KryptonRichTextBox> skkTemp = dictRTB;
+
+                KryptonNavigator nav = (Controls["_navigator"] as KryptonNavigator);
+
+                if (nav == null) return; // throw
+
+                AddPage(cat);
+
+                msg += msg.EndsWith(Environment.NewLine)?"":Environment.NewLine;
+
+                KryptonRichTextBox rtb1 = dictRTB[cat];
+                KryptonRichTextBox rtb2 = dictRTB["ALL"];
+
+                Color c = rtb1.SelectionColor;
+                Font f = rtb1.SelectionFont;
+
+                // Set selection start to end of current texts in rtb1 & rtb2
+                rtb1.SelectionStart = rtb1.Text.Length;
+                rtb2.SelectionStart = rtb2.Text.Length;
+
+                // Add new text to rtb1 & rtb2
+                rtb1.AppendText(msg);
+                rtb2.AppendText(msg);
+
+                // Set selection length to length of appended text
+                rtb1.SelectionLength = msg.Length;
+                rtb2.SelectionLength = msg.Length;
+
+                // Change the color of the appended text in rtb1 & rtb2
+                rtb1.SelectionColor = rtb2.SelectionColor = c;
+
+                // Change the font of the appended text in rtb1 & rtb2
+                rtb1.SelectionFont = rtb2.SelectionFont = f;
+
+                // Set selection start to end of new text in rtb1 & rtb2
+                rtb1.SelectionStart = rtb1.Text.Length;
+                rtb2.SelectionStart = rtb2.Text.Length;
+
+                // Set selection to 0 so no text is selected in rtb1 and rtb2
+                rtb1.SelectionLength = 0;
+                rtb2.SelectionLength = 0;
+            }
         }
-
-        internal static void Write2(string msg, string cat)
-        {
-            if (cat == "ALL") return;
-
-            Dictionary<string, KryptonRichTextBox> skkTemp = CWindow.dictRTB;
-
-            KryptonNavigator nav = (CWindow.Controls["_navigator"] as KryptonNavigator);
-
-            if (nav == null) return; // throw
-
-            CWindow.AddPage(cat);
-
-            if (!msg.EndsWith(Environment.NewLine)) msg += Environment.NewLine;
-
-            KryptonRichTextBox rtb1 = CWindow.dictRTB[cat];
-            KryptonRichTextBox rtb2 = CWindow.dictRTB["ALL"];
-
-            Color c = rtb1.SelectionColor;
-            Font f = rtb1.SelectionFont;
-            rtb1.SelectionStart = rtb1.Text.Length;
-            rtb1.AppendText(msg);
-            rtb1.SelectionLength = msg.Length;
-            rtb1.SelectionColor = c;
-            rtb1.SelectionFont = f;
-
-            rtb2.SelectionColor = rtb1.SelectionColor;
-            rtb2.SelectionFont = rtb1.SelectionFont;
-
-            rtb2.AppendText(msg);
-            rtb1.SelectionStart = rtb1.Text.Length;
-            rtb1.SelectionLength = 0;
-        }
-
         private void SKKConsole_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Check if user closed the box
             if (e.CloseReason == CloseReason.UserClosing)
             {
+                // If they did, cancel the close and hide it instead, to prevent disposal
                 e.Cancel = true;
                 Hide();
-                if (OnConsoleHidden != null) OnConsoleHidden();
+                OnConsoleHidden();
             }
         }
     }

@@ -1,5 +1,4 @@
-﻿
-namespace SKKConsoleNS
+﻿namespace SKKConsoleNS.Data
 {
     partial class SKKConsoleData
     {

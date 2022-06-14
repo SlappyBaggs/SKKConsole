@@ -1,44 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using SKKConsoleNS;
-using ComponentFactory.Krypton.Toolkit;
 using SKKConsoleNS.SKKConsolePageConfig;
+using SKKConsoleNS.Data;
 
 namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
+        private SKKConsoleNS.SKKConsole MyConsole;
+
         public Form1()
         {
             InitializeComponent();
 
             ConsoleData = skkConsoleData1;
 
-            //SKKConsole.OnConsoleHidden += () => { butShowHide.Text = "Show"; };
+            MyConsole = ConsoleData.CWindow;
+
+            ConsoleData.ConsoleHidden += () => butShowHide.Text = "Show";
 
             propertyGrid1.SelectedObject = skkConsoleData1;
         }
 
-        
+
         public SKKConsoleData ConsoleData { get; set; }
 
         private void buttonShowHide_Click(object sender, EventArgs e)
         {
             if (butShowHide.Text == "Show")
             {
-                //SKKConsole.ShowConsole();
+                ConsoleData.ShowConsole();
                 butShowHide.Text = "Hide";
             }
             else
             {
-                //SKKConsole.HideConsole();
+                ConsoleData.HideConsole();
                 butShowHide.Text = "Show";
             }
         }
@@ -46,11 +43,13 @@ namespace WindowsFormsApp1
         private void consoleHidden()
         {
         }
-        
+
+        int clickCount_ = 0;
         private void button_Click(object sender, EventArgs e)
         {
             string s = (sender as Button).Text;
-            //SKKConsole.Write(tbMsg.Text, ((Button)sender).Text);
+            clickCount_++;
+            ConsoleData.Write(s, $"({clickCount_}) {tbMsg.Text}();
         }
 
         public class TestClass
@@ -60,12 +59,8 @@ namespace WindowsFormsApp1
             public string Test { get; set; }
 
             public override string ToString() => Test;
-
-            public override bool Equals(object obj)
-            {
-                if (obj is TestClass) return ((TestClass)obj).Test == Test;
-                return false;
-            }
+            public override bool Equals(object obj) => obj is TestClass other && other.Test == Test;
+            public override int GetHashCode() => Test.GetHashCode();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -82,15 +77,25 @@ namespace WindowsFormsApp1
             bool b5 = c1.PageFont.Equals(c2.PageFont);
             bool b6 = c1 == c2;
             bool b7 = c1.Equals(c2);
-            bool b8 = c1 == skkConsoleData1.DefaultConfig;
-            bool b9 = c1.Equals(skkConsoleData1.DefaultConfig);
+            
+            ConsolePageConfigALL configALL = ConsoleData.PageALLConfig;
+            ConsolePageConfig conf1 = new ConsolePageConfig("ALL", Color.Red, new Font("Comic Sans MS", 12));
+            ConsolePageConfigALL conf2 = new ConsolePageConfigALL("ALL", Color.Red, new Font("Comic Sans MS", 12));
 
+            bool b8 = configALL == conf1;
+            bool b9 = configALL.Equals(conf1);
+
+            bool ba = configALL == conf2;
+            bool bb = conf1.Equals(conf2);
+
+            
             tbMsg.Clear();
             tbMsg.AppendText($"{b0} : {b1}\r\n");
             tbMsg.AppendText($"{b2} : {b3}\r\n");
             tbMsg.AppendText($"{b4} : {b5}\r\n");
             tbMsg.AppendText($"{b6} : {b7}\r\n");
             tbMsg.AppendText($"{b8} : {b9}\r\n");
+            tbMsg.AppendText($"{ba} : {bb}\r\n");
         }
     }
 }
