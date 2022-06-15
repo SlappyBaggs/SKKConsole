@@ -33,7 +33,7 @@
             SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig consolePageConfig1 = new SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig();
             SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig consolePageConfig2 = new SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig();
             SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig consolePageConfig3 = new SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig();
-            SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfigALL consolePageConfigALL1 = new SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfigALL();
+            SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig consolePageConfig4 = new SKKConsoleNS.SKKConsolePageConfig.ConsolePageConfig();
             this.butShowHide = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
@@ -44,7 +44,8 @@
             this.tbMsg = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
-            this.skkConsoleData1 = new SKKConsoleNS.Data.SKKConsoleData(this.components);
+            this.skkConsole1 = new SKKConsoleNS.SKKConsole(this.components);
+            this.butBreak = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this._panelFUCK)).BeginInit();
             this.SuspendLayout();
             // 
@@ -141,29 +142,38 @@
             this.propertyGrid1.Size = new System.Drawing.Size(336, 290);
             this.propertyGrid1.TabIndex = 10;
             // 
-            // skkConsoleData1
+            // skkConsole1
             // 
-            this.skkConsoleData1.DefaultColors = ((System.Collections.Generic.List<System.Drawing.Color>)(resources.GetObject("skkConsoleData1.DefaultColors")));
-            consolePageConfig1.PageColor = System.Drawing.Color.Lime;
-            consolePageConfig1.PageName = "Page";
+            this.skkConsole1.DefaultColors = ((System.Collections.Generic.List<System.Drawing.Color>)(resources.GetObject("skkConsole1.DefaultColors")));
+            consolePageConfig1.PageColor = System.Drawing.Color.Red;
+            consolePageConfig1.PageName = "Led";
             consolePageConfig2.PageColor = System.Drawing.Color.Lime;
-            consolePageConfig2.PageName = "Page";
-            consolePageConfig3.PageColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            consolePageConfig3.PageFont = new System.Drawing.Font("Cookies", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            consolePageConfig3.PageName = "ListOrder";
-            this.skkConsoleData1.DefaultPages.Add(consolePageConfig1);
-            this.skkConsoleData1.DefaultPages.Add(consolePageConfig2);
-            this.skkConsoleData1.DefaultPages.Add(consolePageConfig3);
-            consolePageConfigALL1.PageColor = System.Drawing.Color.Red;
-            consolePageConfigALL1.PageFont = new System.Drawing.Font("Comic Sans MS", 12F);
-            consolePageConfigALL1.PageName = "ALL";
-            this.skkConsoleData1.PageALLConfig = consolePageConfigALL1;
+            consolePageConfig2.PageName = "Zeppelin";
+            consolePageConfig3.PageColor = System.Drawing.Color.Green;
+            consolePageConfig3.PageName = "Pink";
+            consolePageConfig4.PageColor = System.Drawing.Color.Cyan;
+            consolePageConfig4.PageName = "Floyd";
+            this.skkConsole1.DefaultPages.Add(consolePageConfig1);
+            this.skkConsole1.DefaultPages.Add(consolePageConfig2);
+            this.skkConsole1.DefaultPages.Add(consolePageConfig3);
+            this.skkConsole1.DefaultPages.Add(consolePageConfig4);
+            // 
+            // butBreak
+            // 
+            this.butBreak.Location = new System.Drawing.Point(178, 317);
+            this.butBreak.Name = "butBreak";
+            this.butBreak.Size = new System.Drawing.Size(75, 23);
+            this.butBreak.TabIndex = 11;
+            this.butBreak.Text = "BREAK";
+            this.butBreak.UseVisualStyleBackColor = true;
+            this.butBreak.Click += new System.EventHandler(this.butBreak_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.butBreak);
             this.Controls.Add(this.propertyGrid1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.tbMsg);
@@ -194,7 +204,8 @@
         private ComponentFactory.Krypton.Toolkit.KryptonTextBox tbMsg;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.PropertyGrid propertyGrid1;
-        private SKKConsoleNS.Data.SKKConsoleData skkConsoleData1;
+        private SKKConsoleNS.SKKConsole skkConsole1;
+        private System.Windows.Forms.Button butBreak;
     }
 }
 

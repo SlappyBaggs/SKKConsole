@@ -9,17 +9,31 @@ namespace SKKConsoleNS.Data
 {
     public static class Defaults
     {
-        public const string PageALLName = "ALL";
-        public static Color PageALLColor = Color.Red;
-        public const string PageALLFontName = "Comic Sans MS";
-        public const float PageALLFontSize = 12.0f;
-        public const string PageALLString = "ALL;Red;Comic Sans MS, 12pt";
-
         public const string PageName = "Page";
+        public const string PageALLName = "ALL";
         public const string PageColor = "White";
-        public const string PageFontName = "Consolas";
-        public const float PageFontSize = 12.0f;
-        public const string PageFontString = "Consolas, 12pt";
+        public const string DefaultFontName = "Consolas";
+        public const string DefaultFontSizeString = "12";
+
+        public const string DefaultFontString = DefaultFontName + ", " + DefaultFontSizeString + "pt";
+        public static readonly float DefaultFontSize = float.Parse(DefaultFontSizeString);
+        public static readonly Font DefaultFont = new Font(DefaultFontName, DefaultFontSize);
+        public static List<Color> DefaultColors = new List<Color>()
+        {
+            Color.Red,
+            Color.Lime,
+            Color.Green,
+            Color.Cyan,
+            Color.Blue,
+            Color.White,
+            Color.Yellow,
+            Color.Magenta,
+            Color.LightYellow,
+            Color.LightGray,
+            Color.Gray,
+            Color.Purple,
+            Color.Pink
+        };
 
     }
 }

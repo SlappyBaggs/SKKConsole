@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using System.ComponentModel;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SKKConsoleNS.SKKConsolePageConfig
 {
@@ -11,19 +12,44 @@ namespace SKKConsoleNS.SKKConsolePageConfig
     public class ConsolePageConfigCollection : CollectionBase, ICustomTypeDescriptor
     {
         #region COLLECTION IMPLEMENTATION
-
         public ConsolePageConfigCollection() { }
-        public ConsolePageConfigCollection(List<ConsolePageConfig> _list) { foreach (ConsolePageConfig config in _list) List.Add(config); }
+
+        internal SKKConsole MyConsole = null;
+        public ConsolePageConfigCollection(SKKConsole console) { MyConsole = console; }
+        public ConsolePageConfigCollection(List<ConsolePageConfig> _list) { foreach (ConsolePageConfig config in _list) Add(config); }
 
         public override string ToString() => "ConsolePageConfigCollection";
 
         public ConsolePageConfig this[int i] { get => (ConsolePageConfig)List[i]; }
 
-        public void Add(ConsolePageConfig item) { if (item != null) List.Add(item); } //{ if(item != null) List.Add(item); }
+        public int Add(ConsolePageConfig cpc) => List.Add(cpc);
+        
+        protected override void OnValidate(object value)
+        {
+            if (value == null) base.OnValidate(value);
+            else if (!(value is ConsolePageConfig)) throw new ArgumentException("Value must be a ConsolePageConfig");
+            else _Validate(value as ConsolePageConfig);
+        }
+
+        private void _Validate(ConsolePageConfig item)
+        {
+            if (item == null) return;
+
+            if (MyConsole != null)
+            {
+                if (item.PageColor == Color.Empty) item.PageColor = MyConsole.NextColor;
+                if (item.PageFont == null) item.PageFont = MyConsole.DefaultFont;
+            }
+            else
+            {
+                item.PageColor = Color.Purple;
+            }
+        }
 
         public void Remove(ConsolePageConfig item) => List.Remove(item);
         #endregion
 
+        
         #region ICUSTOMTYPEDESCRIPTOR IMPLEMENTATION
         public String GetClassName() => TypeDescriptor.GetClassName(this, true);
 
@@ -61,22 +87,17 @@ namespace SKKConsoleNS.SKKConsolePageConfig
         private ConsolePageConfigCollection collection = null;
         private int index = -1;
 
-        public ConsolePageConfiCollectiongPropertyDescriptor(ConsolePageConfigCollection coll, int i) : base("#" + i.ToString(), null)
+        public ConsolePageConfiCollectiongPropertyDescriptor(ConsolePageConfigCollection coll, int i) : base($"#{i}", null)
         {
             collection = coll;
             index = i;
         }
 
         public override AttributeCollection Attributes { get => new AttributeCollection(null); }
-
         public override bool CanResetValue(object component) { return true; }
-
         public override Type ComponentType { get => collection.GetType(); }
-
         public override string DisplayName { get => "(collection)"; /*$"Page: {collection[index].PageName}";*/ }
-
         public override string ToString() => "Collection";
-
         public override string Description
         {
             get
@@ -93,17 +114,11 @@ namespace SKKConsoleNS.SKKConsolePageConfig
         }
 
         public override object GetValue(object component) => collection[index];
-
         public override bool IsReadOnly { get => false; }
-
         public override string Name { get => "#" + index.ToString(); }
-
         public override Type PropertyType { get => collection[index].GetType(); }
-
         public override void ResetValue(object component) { }
-
         public override bool ShouldSerializeValue(object component) => true;
-
         public override void SetValue(object component, object value) { }// => collection[index] = (ConsolePageConfig)value;
     }
 }

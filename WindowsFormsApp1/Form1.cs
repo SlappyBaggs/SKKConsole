@@ -1,41 +1,41 @@
 ﻿using System;
-using System.Drawing;
+//using System.Drawing;
 using System.Windows.Forms;
+using SKKConsoleNS;
 using SKKConsoleNS.SKKConsolePageConfig;
-using SKKConsoleNS.Data;
 
 namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        private SKKConsoleNS.SKKConsole MyConsole;
+        private SKKConsoleNS.SKKConsoleForm MyConsole;
 
         public Form1()
         {
             InitializeComponent();
 
-            ConsoleData = skkConsoleData1;
+            ConsoleController = skkConsole1;
 
-            MyConsole = ConsoleData.CWindow;
+            MyConsole = ConsoleController.CWindow;
 
-            ConsoleData.ConsoleHidden += () => butShowHide.Text = "Show";
+            ConsoleController.ConsoleHidden += () => butShowHide.Text = "Show";
 
-            propertyGrid1.SelectedObject = skkConsoleData1;
+            propertyGrid1.SelectedObject = skkConsole1;
         }
 
 
-        public SKKConsoleData ConsoleData { get; set; }
+        public SKKConsole ConsoleController { get; set; }
 
         private void buttonShowHide_Click(object sender, EventArgs e)
         {
             if (butShowHide.Text == "Show")
             {
-                ConsoleData.ShowConsole();
+                ConsoleController.ShowConsole();
                 butShowHide.Text = "Hide";
             }
             else
             {
-                ConsoleData.HideConsole();
+                ConsoleController.HideConsole();
                 butShowHide.Text = "Show";
             }
         }
@@ -49,7 +49,7 @@ namespace WindowsFormsApp1
         {
             string s = (sender as Button).Text;
             clickCount_++;
-            ConsoleData.Write(s, $"({clickCount_}) {tbMsg.Text}();
+            ConsoleController.Write(s, $"({clickCount_}) {tbMsg.Text}");
         }
 
         public class TestClass
@@ -78,24 +78,16 @@ namespace WindowsFormsApp1
             bool b6 = c1 == c2;
             bool b7 = c1.Equals(c2);
             
-            ConsolePageConfigALL configALL = ConsoleData.PageALLConfig;
-            ConsolePageConfig conf1 = new ConsolePageConfig("ALL", Color.Red, new Font("Comic Sans MS", 12));
-            ConsolePageConfigALL conf2 = new ConsolePageConfigALL("ALL", Color.Red, new Font("Comic Sans MS", 12));
-
-            bool b8 = configALL == conf1;
-            bool b9 = configALL.Equals(conf1);
-
-            bool ba = configALL == conf2;
-            bool bb = conf1.Equals(conf2);
-
-            
             tbMsg.Clear();
             tbMsg.AppendText($"{b0} : {b1}\r\n");
             tbMsg.AppendText($"{b2} : {b3}\r\n");
             tbMsg.AppendText($"{b4} : {b5}\r\n");
             tbMsg.AppendText($"{b6} : {b7}\r\n");
-            tbMsg.AppendText($"{b8} : {b9}\r\n");
-            tbMsg.AppendText($"{ba} : {bb}\r\n");
+        }
+
+        private void butBreak_Click(object sender, EventArgs e)
+        {
+            ConsoleController.Break();
         }
     }
 }

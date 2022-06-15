@@ -1,208 +1,102 @@
-﻿using ComponentFactory.Krypton.Toolkit;
-using ComponentFactory.Krypton.Navigator;
-using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 using SKKConsoleNS.SKKConsolePageConfig;
-using SKKConsoleNS.Data;
 
 namespace SKKConsoleNS
 {
-    public delegate void ConsoleHidden();
-
-    public partial class SKKConsole : KryptonForm
+    public partial class SKKConsole : Component
     {
-#if EMBED_FONTS
-        [System.Runtime.InteropServices.DllImport("gdi32.dll")]
-        private static extern IntPtr AddFontMemResourceEx(IntPtr pbFont, uint cbFont, IntPtr pdv, [System.Runtime.InteropServices.In] ref uint pcFonts);
-        private PrivateFontCollection fonts = new PrivateFontCollection();
-
-        private void InitFont()
+        public void Break()
         {
-            byte[] fontData = Properties.Resources.fontDejaVuSansMono;
-            IntPtr fontPtr = System.Runtime.InteropServices.Marshal.AllocCoTaskMem(fontData.Length);
-            System.Runtime.InteropServices.Marshal.Copy(fontData, 0, fontPtr, fontData.Length);
-            uint dummy = 0;
-            fonts.AddMemoryFont(fontPtr, Properties.Resources.fontDejaVuSansMono.Length);
-            AddFontMemResourceEx(fontPtr, (uint)Properties.Resources.fontDejaVuSansMono.Length, IntPtr.Zero, ref dummy);
-            System.Runtime.InteropServices.Marshal.FreeCoTaskMem(fontPtr);
-
-            //myFont = new Font(fonts.Families[0], 16.0F);
-            //myFont = new Font("Playball", 16.0F);
+            System.Diagnostics.Debugger.Break();
         }
-#endif
 
-        private IntPtr _handleMagic;
-
-        private Font defFont = new Font("Comic Sans MS", 12f);
-
-        internal event ConsoleHidden OnConsoleHidden = delegate { };
-
-        private SKKConsoleData myData_ = null;
-        public SKKConsole(SKKConsoleData data)
+        public SKKConsole()
         {
             InitializeComponent();
-            myData_ = data;
-            _handleMagic = Handle;
+            DefaultPages = new ConsolePageConfigCollection(this);
+            //DefaultPages.MyConsole = this;            
+        }
 
-#if EMBED_FONTS
-            InitFont();
+        public SKKConsole(IContainer container)
+        {
+            container.Add(this);
+            InitializeComponent();
+            DefaultPages = new ConsolePageConfigCollection(this);
+            //DefaultPages.MyConsole = this;
+        }
+
+        private SKKConsoleForm consoleForm_ = null;
+
+        public SKKConsoleForm CWindow { get => consoleForm_ ?? (consoleForm_ = new SKKConsoleForm(this)); }
+        public bool Showing { get => CWindow.Visible; }
+        public bool Hidden { get => !Showing; }
+        public void ShowConsole() => CWindow.Show();
+        public void HideConsole() => CWindow.Hide();
+        public void ToggleConsole() { if (Showing) HideConsole(); else ShowConsole(); }
+
+        public event ConsoleHidden ConsoleHidden = delegate { };
+        public void OnConsoleHidden() => ConsoleHidden();
+
+        public void Write(string s1, string s2) { CWindow.Write(s1, s2); }
+
+        /*
+         *  DefaultColors & DefaultFont hold their actual values in private static variables
+         *  with public static getters so that they can be used by ConsolePageConfig without
+         *  requiring to hand off an instance to the main console.
+         * 
+         */
+
+        [Browsable(true)]
+        [Category("Page Options")]
+        [DisplayName("DefaultColors")]
+        [Description("Colors to choose from for Pages that do not explicitly set one")]
+        public List<Color> DefaultColors { get; set; } = Data.Defaults.DefaultColors;
+
+        private int colorIndex_ = 0;
+        [Browsable(false)]
+        public Color NextColor
+        {
+            get
+            {
+                if (colorIndex_ >= DefaultColors.Count) colorIndex_ = 0;
+                return DefaultColors[colorIndex_++];
+            }
+        }
+
+        [Browsable(true)]
+        [Category("Page Options")]
+        [DisplayName("Default Font")]
+        [Description("Font given to Pages that do not explicitly set one")]
+        [DefaultValue(typeof(Font), Data.Defaults.DefaultFontString)]
+        public Font DefaultFont { get; set; } = Data.Defaults.DefaultFont;
+
+
+#if USE_ALL_PAGE_CONFIG
+        /*
+         *  The 'ALL' page doesn't need its own config
+         *  It's name is always 'ALL', and it only uses colors from the other
+         *  Color and Font are taken from the tabs they share a message with
+         */
+        [Browsable(true)]
+        [Category("Page Options")]
+        [DisplayName("Page ALL Page")]
+        [Description("Setup for the main 'ALL' page")]
+        [TypeConverter(typeof(ConsolePageConfigTypeConverter))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [DefaultValue(typeof(ConsolePageConfigALL), Defaults.PageALLString)]
+        public ConsolePageConfigALL PageALLConfig { get; set; } = new ConsolePageConfigALL(Defaults.PageALLFontName, Defaults.PageALLColor, new Font(Defaults.PageALLFontName, Defaults.PageALLFontSize));
 #endif
 
-            OnConsoleHidden += myData_.OnConsoleHidden;
-
-            InitDefaultPages();
-        }
-
-        public void InitDefaultPages()
-        {
-            _navigator.Pages.Clear();
-            dictRTB.Clear();
-            AddCategory("ALL", myData_.PageALLConfig.PageColor, myData_.PageALLConfig.PageFont);
-
-            foreach (ConsolePageConfig page in myData_.DefaultPages)
-                AddCategory(page.PageName, page.PageColor, page.PageFont /*?? SKKConsoleDefaultFont*/);
-        }
-
-        /******************************************************
-            A few ways to add a category page.  All functions
-            take the category name as a parameter.
-
-         
-            Made private so we will be the only one who can 
-            add category pages.  These functions create a new
-            page, but the page is empty.  I don't want pages
-            to be shown (or even exist) if they have no
-            messages.  Since we are the only one who can make
-            a page we can guarantee we only do so when it won't
-            be empty.  
-        ******************************************************/
-        private void AddPage(string name) => AddCategory(name);
-
-        private void AddCategory(string name) => AddCategory(name, SKKConsoleData.NextColor);
-
-        private void AddCategory(string name, Color col_) => AddCategory(name, col_, SKKConsoleData.DefaultFont);
-
-        private void AddCategory(string name, Color col_, Font font_)
-        {
-            bool b;
-            IntPtr temp;
-            if (!(b = HasPage(name)))
-            {
-                KryptonPage kp = new KryptonPage(name);
-                kp.Name = name;
-                SKKConsolePage skkPage = new SKKConsolePage(name);
-                skkPage.Name = name;
-                skkPage.Dock = DockStyle.Fill;
-                kp.Controls.Add(skkPage);
-                skkPage.tbRich.SelectionColor = col_;
-                skkPage.tbRich.SelectionFont = font_;
-                _navigator.Pages.Add(kp);
-
-                temp = kp.Handle;
-                temp = skkPage.tbRich.Handle;
-                dictRTB.Add(name, skkPage.tbRich);
-            }
-            List<string> keys = dictRTB.Keys.ToList();
-        }
-
-        private Dictionary<string, KryptonRichTextBox> dictRTB = new Dictionary<string, KryptonRichTextBox>();
-
-        /**********************************************************
-            A property that returns whether a category/page exists
-            or has been created.  The value returned is real-time.
-            
-            The category will have had to have been written to at
-            least once or else it wouldn't have beeb created yet.
-            So 'HasPage' could return 'false' at any point in the
-            program and then return 'true' some time after that.
-        **********************************************************/
-        public bool HasPage(string _name)
-        {
-            IEnumerable<KryptonPage> _page =
-                from page in _navigator.Pages
-                where page.Text == _name
-                select page;
-
-            //int c1 = _page.Count;
-            int c2 = _page.Count();
-            return _page.Count() > 0;
-        }
-
-        /*************************************************************
-            User can add console messages with this function.
-        
-            If the desired output category is 'ALL', this function will exit and do nothing
-
-            If the desired output category doesn't exist, this function will create it (togglable option?)
-
-            Writes the comment to the category page in category's font & color
-
-            Writes the comment to the 'ALL' page in category's font & color
-         *************************************************************/
-        internal void Write(string cat, string msg)
-        {
-            if (InvokeRequired) { Invoke((Action)delegate { Write(msg, cat); }); }
-            else
-            {
-                if (cat == "ALL") return;
-
-                Dictionary<string, KryptonRichTextBox> skkTemp = dictRTB;
-
-                KryptonNavigator nav = (Controls["_navigator"] as KryptonNavigator);
-
-                if (nav == null) return; // throw
-
-                AddPage(cat);
-
-                msg += msg.EndsWith(Environment.NewLine)?"":Environment.NewLine;
-
-                KryptonRichTextBox rtb1 = dictRTB[cat];
-                KryptonRichTextBox rtb2 = dictRTB["ALL"];
-
-                Color c = rtb1.SelectionColor;
-                Font f = rtb1.SelectionFont;
-
-                // Set selection start to end of current texts in rtb1 & rtb2
-                rtb1.SelectionStart = rtb1.Text.Length;
-                rtb2.SelectionStart = rtb2.Text.Length;
-
-                // Add new text to rtb1 & rtb2
-                rtb1.AppendText(msg);
-                rtb2.AppendText(msg);
-
-                // Set selection length to length of appended text
-                rtb1.SelectionLength = msg.Length;
-                rtb2.SelectionLength = msg.Length;
-
-                // Change the color of the appended text in rtb1 & rtb2
-                rtb1.SelectionColor = rtb2.SelectionColor = c;
-
-                // Change the font of the appended text in rtb1 & rtb2
-                rtb1.SelectionFont = rtb2.SelectionFont = f;
-
-                // Set selection start to end of new text in rtb1 & rtb2
-                rtb1.SelectionStart = rtb1.Text.Length;
-                rtb2.SelectionStart = rtb2.Text.Length;
-
-                // Set selection to 0 so no text is selected in rtb1 and rtb2
-                rtb1.SelectionLength = 0;
-                rtb2.SelectionLength = 0;
-            }
-        }
-        private void SKKConsole_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            // Check if user closed the box
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                // If they did, cancel the close and hide it instead, to prevent disposal
-                e.Cancel = true;
-                Hide();
-                OnConsoleHidden();
-            }
-        }
+        [Browsable(true)]
+        [Category("Page Options")]
+        [DisplayName("DefaultPages")]
+        [Description("Pages to auto-create on start")]
+        [TypeConverter(typeof(ConsolePageConfigCollectionTypeConverter))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [Editor(typeof(CollectionEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public ConsolePageConfigCollection DefaultPages { get; set; }// = new ConsolePageConfigCollection();
     }
 }

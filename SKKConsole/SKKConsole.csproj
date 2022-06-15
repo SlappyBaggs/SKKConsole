@@ -67,17 +67,17 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
-    <Compile Include="Console\SKKConsole.cs">
+    <Compile Include="Console\SKKConsoleForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Console\SKKConsoleForm.Designer.cs">
+      <DependentUpon>SKKConsoleForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Console\SKKConsole.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Console\SKKConsole.Designer.cs">
       <DependentUpon>SKKConsole.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Data\SKKConsoleData.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Data\SKKConsoleData.Designer.cs">
-      <DependentUpon>SKKConsoleData.cs</DependentUpon>
     </Compile>
     <Compile Include="Console\SKKConsolePage.cs">
       <SubType>UserControl</SubType>
@@ -99,8 +99,8 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Console\SKKConsole.resx">
-      <DependentUpon>SKKConsole.cs</DependentUpon>
+    <EmbeddedResource Include="Console\SKKConsoleForm.resx">
+      <DependentUpon>SKKConsoleForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Console\SKKConsolePage.resx">
