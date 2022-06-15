@@ -102,13 +102,13 @@ namespace SKKConsoleNS
                 temp = kp.Handle;
                 temp = skkPage.tbRich.Handle;
                 //dictRTB.Add(name, skkPage.tbRich);
-                dictData.Add(name, new Tuple<Color, Font>(col_, font_));
+                dictData.Add(name, (col_, font_));
             }
             //List<string> keys = dictRTB.Keys.ToList();
         }
 
         //private Dictionary<string, KryptonRichTextBox> dictRTB = new Dictionary<string, KryptonRichTextBox>();
-        private Dictionary<string, Tuple<Color, Font>> dictData = new Dictionary<string, Tuple<Color, Font>>();
+        private Dictionary<string, (Color PageColor, Font PageFont)> dictData = new Dictionary<string, (Color, Font)>();
 
         /**********************************************************
             A property that returns whether a category/page exists
@@ -166,8 +166,8 @@ namespace SKKConsoleNS
                 KryptonRichTextBox rtb2 = (nav.Pages["ALL"].Controls["ALL"] as SKKConsolePage).tbRich;
 
                 // Set PageALL's Color and Font to rtb1's
-                rtb2.SelectionColor = rtb1.SelectionColor = dictData[cat].Item1;
-                rtb2.SelectionFont = rtb1.SelectionFont = dictData[cat].Item2;
+                rtb2.SelectionColor = rtb1.SelectionColor = dictData[cat].PageColor;
+                rtb2.SelectionFont = rtb1.SelectionFont = dictData[cat].PageFont;
 
                 // Set selection start to end of current texts in rtb1 & rtb2
                 rtb1.SelectionStart = rtb1.Text.Length;
