@@ -49,6 +49,7 @@
             this.tbRich.TabIndex = 0;
             this.tbRich.Text = "";
             this.tbRich.TextChanged += new System.EventHandler(this.tbRich_TextChanged);
+            this.tbRich.SystemColorsChanged += new System.EventHandler(this.tbRich_SystemColorsChanged);
             // 
             // groupPage
             // 

@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ComponentFactory.Krypton.Toolkit;
 
@@ -20,8 +15,10 @@ namespace SKKConsoleNS
         public SKKConsolePage(string name)
         {
             InitializeComponent();
-            this.Name = name;
+            Name = name;
         }
+
+        internal Color oldColor_ = Color.Empty;
 
         //internal KryptonRichTextBox RTB { get => tbRich; }
 
@@ -36,8 +33,14 @@ namespace SKKConsoleNS
             int lines = tbRich.Lines.Count();
             string c = tbRich.SelectionColor.ToString();
             string f = tbRich.SelectionFont.ToString();
-            groupPage.ValuesSecondary.Heading = lines.ToString() + " line" + ((lines != 1) ? "s" : "") + "  /  " + c + "  /  " + f;
+            groupPage.ValuesSecondary.Heading = $"{lines} lines / {c} / {f}";
+
             tbRich.ScrollToCaret();
+        }
+
+        private void tbRich_SystemColorsChanged(object sender, EventArgs e)
+        {
+            MessageBox.Show($"Colors changed... was {oldColor_} now {tbRich.SelectionColor}", "Color Changed");
         }
     }
 }
