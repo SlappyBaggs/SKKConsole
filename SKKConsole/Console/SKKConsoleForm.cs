@@ -34,11 +34,6 @@ namespace SKKConsoleNS
             //myFont = new Font("Playball", 16.0F);
         }
 #endif
-
-        private IntPtr _handleMagic;
-
-        private Font defFont = new Font("Comic Sans MS", 12f);
-
         internal event ConsoleHidden OnConsoleHidden = delegate { };
 
         private SKKConsole myData_ = null;
@@ -46,14 +41,13 @@ namespace SKKConsoleNS
         {
             InitializeComponent();
             myData_ = data;
-            _handleMagic = Handle;
+            IntPtr _handleMagic = Handle;
 
 #if EMBED_FONTS
             InitFont();
 #endif
 
             OnConsoleHidden += myData_.OnConsoleHidden;
-
             InitDefaultPages();
         }
 
@@ -85,29 +79,23 @@ namespace SKKConsoleNS
         private void AddCategory(string name, Color col_) => AddCategory(name, col_, myData_.DefaultFont);
         private void AddCategory(string name, Color col_, Font font_)
         {
-            bool b;
-            IntPtr temp;
-            if (!(b = HasPage(name)))
-            {
-                KryptonPage kp = new KryptonPage(name);
-                kp.Name = name;
-                SKKConsolePage skkPage = new SKKConsolePage(name);
-                skkPage.Name = name;
-                skkPage.Dock = DockStyle.Fill;
-                kp.Controls.Add(skkPage);
-                if(col_ != Color.Empty) skkPage.tbRich.SelectionColor = skkPage.oldColor_ = col_;
-                if(font_ != null) skkPage.tbRich.SelectionFont = font_;
-                _navigator.Pages.Add(kp);
+            if (HasPage(name)) return;
+            KryptonPage kp = new KryptonPage(name);
+            kp.Name = name;
+            SKKConsolePage skkPage = new SKKConsolePage(name);
+            skkPage.Name = name;
+            skkPage.Dock = DockStyle.Fill;
+            kp.Controls.Add(skkPage);
+            if(col_ != Color.Empty) skkPage.tbRich.SelectionColor = skkPage.oldColor_ = col_;
+            if(font_ != null) skkPage.tbRich.SelectionFont = font_;
+            _navigator.Pages.Add(kp);
 
-                temp = kp.Handle;
-                temp = skkPage.tbRich.Handle;
-                //dictRTB.Add(name, skkPage.tbRich);
-                dictData.Add(name, (col_, font_));
-            }
-            //List<string> keys = dictRTB.Keys.ToList();
+            // Force Handle generation
+            int temp = kp.Handle.ToInt32() + skkPage.tbRich.Handle.ToInt32();
+           
+            dictData.Add(name, (col_, font_));
         }
 
-        //private Dictionary<string, KryptonRichTextBox> dictRTB = new Dictionary<string, KryptonRichTextBox>();
         private Dictionary<string, (Color PageColor, Font PageFont)> dictData = new Dictionary<string, (Color, Font)>();
 
         /**********************************************************
@@ -120,13 +108,6 @@ namespace SKKConsoleNS
             program and then return 'true' some time after that.
         **********************************************************/
         public bool HasPage(string _name) => dictData.Keys.Contains(_name);
-        //{
-            //IEnumerable<KryptonPage> _page =
-                //from page in _navigator.Pages
-                //where page.Text == _name
-                //select page;
-            //return _page.Count() > 0;
-        //}
 
         /*************************************************************
             User can add console messages with this function.
@@ -147,17 +128,12 @@ namespace SKKConsoleNS
             {
                 if (cat == "ALL") return;
 
-                //Dictionary<string, KryptonRichTextBox> skkTemp = dictRTB;
-
+                // Why are we checking this?????
                 KryptonNavigator nav = (Controls["_navigator"] as KryptonNavigator);
-
-                if (nav == null) return; // throw
+                if (nav == null) return;
 
                 // Attempt to add, if already exists then nothing happens
                 AddPage(cat);
-
-                //KryptonPage page = nav.Pages[cat];
-                //SKKConsolePage skkPage = page.Controls[cat] as SKKConsolePage;
 
                 // Ensure the 'msg' ends with a newline
                 msg += msg.EndsWith(Environment.NewLine)?"":Environment.NewLine;
@@ -176,22 +152,6 @@ namespace SKKConsoleNS
                 // Add new text to rtb1 & rtb2
                 rtb1.AppendText(msg);
                 rtb2.AppendText(msg);
-
-                // Set selection length to length of appended text
-                // I think this is what actually 'fires' off a new selection and changes color and font
-                //rtb1.SelectionLength = msg.Length;
-                //rtb2.SelectionLength = msg.Length;
-
-                // Set selection start to end of new text in rtb1 & rtb2
-                //rtb1.SelectionStart = rtb1.Text.Length;
-                //rtb2.SelectionStart = rtb2.Text.Length;
-
-                //rtb1.SelectionColor = rtb2.SelectionColor = c;
-                //rtb1.SelectionFont = rtb2.SelectionFont = f;
-
-                // Set selection to 0 so no text is selected in rtb1 and rtb2
-                //rtb1.SelectionLength = 0;
-                //rtb2.SelectionLength = 0;
             }
         }
         private void SKKConsole_FormClosing(object sender, FormClosingEventArgs e)
