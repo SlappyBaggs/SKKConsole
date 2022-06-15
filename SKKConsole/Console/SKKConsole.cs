@@ -17,7 +17,6 @@ namespace SKKConsoleNS
         {
             InitializeComponent();
             DefaultPages = new ConsolePageConfigCollection(this);
-            //DefaultPages.MyConsole = this;            
         }
 
         public SKKConsole(IContainer container)
@@ -25,7 +24,6 @@ namespace SKKConsoleNS
             container.Add(this);
             InitializeComponent();
             DefaultPages = new ConsolePageConfigCollection(this);
-            //DefaultPages.MyConsole = this;
         }
 
         private SKKConsoleForm consoleForm_ = null;
@@ -97,6 +95,6 @@ namespace SKKConsoleNS
         [TypeConverter(typeof(ConsolePageConfigCollectionTypeConverter))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [Editor(typeof(CollectionEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public ConsolePageConfigCollection DefaultPages { get; set; }// = new ConsolePageConfigCollection();
+        public ConsolePageConfigCollection DefaultPages { get; set; }
     }
 }

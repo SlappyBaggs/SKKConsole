@@ -54,12 +54,11 @@ namespace SKKConsoleNS
         public void InitDefaultPages()
         {
             _navigator.Pages.Clear();
-            //dictRTB.Clear();
             dictData.Clear();
             AddCategory("ALL", Color.Empty, null);
 
             foreach (ConsolePageConfig page in myData_.DefaultPages)
-                AddCategory(page.PageName, page.PageColor, page.PageFont /*?? SKKConsoleDefaultFont*/);
+                AddCategory(page.PageName, page.PageColor, page.PageFont);
         }
 
         /******************************************************
@@ -79,6 +78,14 @@ namespace SKKConsoleNS
         private void AddCategory(string name, Color col_) => AddCategory(name, col_, myData_.DefaultFont);
         private void AddCategory(string name, Color col_, Font font_)
         {
+            if (name is null)
+            {
+                throw new ArgumentNullException("Category name cannot be null.");
+            }
+            if (name == "")
+            {
+                throw new ArgumentException("Category name cannot be empty.");
+            }
             if (HasPage(name)) return;
             KryptonPage kp = new KryptonPage(name);
             kp.Name = name;
@@ -86,14 +93,25 @@ namespace SKKConsoleNS
             skkPage.Name = name;
             skkPage.Dock = DockStyle.Fill;
             kp.Controls.Add(skkPage);
-            if(col_ != Color.Empty) skkPage.tbRich.SelectionColor = skkPage.oldColor_ = col_;
-            if(font_ != null) skkPage.tbRich.SelectionFont = font_;
+            /*
+             *  No need to set Color or Font into a RichTextBox now.
+             *  We set the Color & Font just before adding text to it
+             *  when the Selection start is where the next text is about
+             *  to be placed.  Otherwise, any changes to SelectionStart
+             *  will revert the SelectionColor and SelectionFont to
+             *  system defaults, which is not what we want.
+             */
+            //if(col_ != Color.Empty) skkPage.tbRich.SelectionColor = skkPage.oldColor_ = col_;
+            //if(font_ != null) skkPage.tbRich.SelectionFont = font_;
             _navigator.Pages.Add(kp);
 
             // Force Handle generation
             int temp = kp.Handle.ToInt32() + skkPage.tbRich.Handle.ToInt32();
            
-            dictData.Add(name, (col_, font_));
+            // Don't add a dictionary entry for the "ALL" page
+            // It's Color will be Empty and its Font will be null
+            if(name != "ALL")
+                dictData.Add(name, (col_, font_));
         }
 
         private Dictionary<string, (Color PageColor, Font PageFont)> dictData = new Dictionary<string, (Color, Font)>();
@@ -113,7 +131,7 @@ namespace SKKConsoleNS
             User can add console messages with this function.
         
             If the desired output category is 'ALL', this function will exit and do nothing
-
+        7
             If the desired output category doesn't exist, this function will create it,
             using the next color index of the DefaultColors and DefaultFont
             (make auto-generation a togglable option???)
@@ -126,7 +144,13 @@ namespace SKKConsoleNS
             if (InvokeRequired) { Invoke((Action)delegate { Write(msg, cat); }); }
             else
             {
+                if (cat is null)
+                {
+                    throw new ArgumentNullException("Cannot write to a null category.");
+                }
+
                 if (cat == "ALL") return;
+                if (msg == "") return;
 
                 // Why are we checking this?????
                 KryptonNavigator nav = (Controls["_navigator"] as KryptonNavigator);
@@ -141,13 +165,13 @@ namespace SKKConsoleNS
                 KryptonRichTextBox rtb1 = (nav.Pages[cat].Controls[cat] as SKKConsolePage).tbRich;
                 KryptonRichTextBox rtb2 = (nav.Pages["ALL"].Controls["ALL"] as SKKConsolePage).tbRich;
 
-                // Set PageALL's Color and Font to rtb1's
-                rtb2.SelectionColor = rtb1.SelectionColor = dictData[cat].PageColor;
-                rtb2.SelectionFont = rtb1.SelectionFont = dictData[cat].PageFont;
-
                 // Set selection start to end of current texts in rtb1 & rtb2
                 rtb1.SelectionStart = rtb1.Text.Length;
                 rtb2.SelectionStart = rtb2.Text.Length;
+
+                // Set rtb1's and PageALL's Color and Font to the values in rtb1's dictionary entry
+                rtb2.SelectionColor = rtb1.SelectionColor = dictData[cat].PageColor;
+                rtb2.SelectionFont = rtb1.SelectionFont = dictData[cat].PageFont;
 
                 // Add new text to rtb1 & rtb2
                 rtb1.AppendText(msg);
